@@ -4,3 +4,4 @@ dist/
 .env.local 
 .vite/ 
 client/package-lock.json
+.vercel
