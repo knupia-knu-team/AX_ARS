@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { APIAnalysisResult } from './types/shared';
 import { ECOMMERCE_FAQ_DATABASE } from './data/faqData';
+import { runMockAnalysis } from './mockEngine';
 
 // 10가지 실시간 ARS 대기 콜 정의
 interface MockScenario {
@@ -313,26 +314,9 @@ function App() {
     const selected = ARS_QUEUE[index];
 
     try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: selected.text,
-          domain: 'ecommerce',
-          context: {
-            channel: 'phone_call_simulation',
-            orderId: selected.order,
-          },
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`서버 오류 (Status: ${response.status})`);
-      }
-
-      const data: APIAnalysisResult = await response.json();
+      // GitHub Pages 정적 배포: 클라이언트 사이드 Mock Engine 직접 호출
+      await new Promise(resolve => setTimeout(resolve, 600)); // 로딩 시뮬레이션
+      const data: APIAnalysisResult = runMockAnalysis(selected.text);
       setResult(data);
       
       // 추천 부서 자동 매핑
@@ -352,7 +336,7 @@ function App() {
       setPhoneStatus('상담 중');
     } catch (err: any) {
       console.error('분석 요청 에러:', err);
-      setError(err.message || '서버 API 요청 중 오류가 발생했습니다.');
+      setError(err.message || '분석 처리 중 오류가 발생했습니다.');
       setPhoneStatus('상담 대기');
     } finally {
       setIsAnalyzing(false);
