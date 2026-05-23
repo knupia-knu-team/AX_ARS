@@ -28,7 +28,9 @@
     "vite": "^8.0.12"
   },
   "optionalDependencies": {
+    "@rolldown/binding-darwin-arm64": "1.0.2",
     "@rolldown/binding-linux-x64-gnu": "1.0.2",
-    "@rolldown/binding-linux-x64-musl": "1.0.2"
+    "@rolldown/binding-linux-x64-musl": "1.0.2",
+    "lightningcss-darwin-arm64": "1.32.0"
   }
 }

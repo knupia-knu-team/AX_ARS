@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm run build:client",
+  "outputDirectory": "client/dist",
+  "functions": {
+    "api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}

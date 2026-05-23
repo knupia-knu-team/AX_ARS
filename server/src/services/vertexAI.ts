@@ -6,10 +6,10 @@ import { GoogleGenAI } from '@google/genai';
 import type { APIAnalysisResult } from '../types/shared.js';
 
 // 환경 변수 설정 로드
-const useGemini = process.env.USE_GEMINI === 'true';
+const useGemini = process.env.USE_VERTEX_AI === 'true' || process.env.USE_GEMINI === 'true';
 const project = process.env.GOOGLE_CLOUD_PROJECT;
 const location = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
-const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+const model = process.env.VERTEX_AI_MODEL || process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 
 let aiClient: GoogleGenAI | null = null;
 

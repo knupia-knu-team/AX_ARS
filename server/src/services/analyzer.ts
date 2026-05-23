@@ -6,11 +6,11 @@ import type { APIAnalysisResult } from '../types/shared.js';
 import { analyzeWithGemini } from './vertexAI.js';
 import { runMockAnalysis } from './mockEngine.js';
 
-const useGemini = process.env.USE_GEMINI === 'true';
+const useGemini = process.env.USE_VERTEX_AI === 'true' || process.env.USE_GEMINI === 'true';
 
 /**
  * 고객 문의 분석 메인 진입점 (Dual Engine Orchestrator)
- * 1. USE_GEMINI=true이고 자격증명/클라이언트가 준비되면 Gemini API 호출을 수행합니다.
+ * 1. USE_VERTEX_AI=true(또는 기존 USE_GEMINI=true)이고 자격증명/클라이언트가 준비되면 Gemini API 호출을 수행합니다.
  * 2. 만약 API 호출이 실패하거나 설정이 누락되거나, 스키마 유효성 검증이 안 될 경우
  *    자동으로 로컬 Mock Rule Engine으로 Fallback 처리를 수행합니다.
  */

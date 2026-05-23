@@ -195,6 +195,22 @@ const DEPARTMENTS = [
   '일반상담팀'
 ];
 
+async function analyzeInquiryViaApi(text: string): Promise<APIAnalysisResult> {
+  const response = await fetch('/api/analyze', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ text })
+  });
+
+  if (!response.ok) {
+    throw new Error(`분석 API 요청 실패 (${response.status})`);
+  }
+
+  return response.json() as Promise<APIAnalysisResult>;
+}
+
 function App() {
   // CTI 상태 및 대기열
   const [activeScenIdx, setActiveScenIdx] = useState<number>(0);
@@ -314,9 +330,12 @@ function App() {
     const selected = ARS_QUEUE[index];
 
     try {
-      // GitHub Pages 정적 배포: 클라이언트 사이드 Mock Engine 직접 호출
+      // Vercel 배포 시에는 서버 API를 우선 호출하고, 실패 시 로컬 Mock으로 우회합니다.
       await new Promise(resolve => setTimeout(resolve, 600)); // 로딩 시뮬레이션
-      const data: APIAnalysisResult = runMockAnalysis(selected.text);
+      const data: APIAnalysisResult = await analyzeInquiryViaApi(selected.text).catch((apiError) => {
+        console.warn('분석 API 호출 실패, 로컬 Mock Engine으로 우회합니다.', apiError);
+        return runMockAnalysis(selected.text);
+      });
       setResult(data);
       
       // 추천 부서 자동 매핑
